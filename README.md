@@ -18,4 +18,4 @@ Um aplicativo mobile simples desenvolvido em **Flutter** que simula um crachá d
 1. Certifique-se de ter o ambiente [Flutter](https://docs.flutter.dev/get-started/install) configurado na sua máquina.
 2. Clone este repositório (substitua pelo seu link):
    ```bash
-   git clone [https://github.com/seu-usuario/cracha-digital.git](https://github.com/seu-usuario/cracha-digital.git)
+   git clone https://github.com/MisaelBM/projeto_cracha.git
