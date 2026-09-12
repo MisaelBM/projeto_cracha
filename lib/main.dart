@@ -1,124 +1,177 @@
 import 'package:flutter/material.dart';
-// Importa o pacote do Flutter que traz os widgets:
-// MaterialApp, Scaffold, AppBar, Text e entre outros.
-// Sem esse import nenhum desses widgets existirá no arquivo. 
 
-void main(){
-  // Ponto de Entrada do programa dart (primeira função a ser sexecutada) quando o app roda
-  runApp(const CrachaApp());
-  // runAPP liga o motor do Flutter para entregar o widget raíz (CrachaApp) que será desenhado na tela.
-  // O Const especifica que o widget pode ser construido em tempo de compilação.
+void main() {
+  runApp(const ContadorApp());
 }
-class CrachaApp extends StatelessWidget{
-  // Extends Statelesswidget signifca que a classe herda o comportamento de um widget 'sem memória'.
-  // Ele desce a tela, mas não guarda nehum dado que muda sozinho, porque nome ou cargo são fixos durante o uso do app.
-  const CrachaApp({super.key});
-  // Construtor da Classe. 'super.key' repassa o parâmetro key para a classe pai para identificar o widget dentro da árvore.
-  // Exemplo: Imagine que você tem uma lista de tarefas na tela do celular e decide apagar a primeira tarefa.
-  // Como o Flutter sabe qual tarefa ele deve destruir e quais manter? Ele sabe porque cada widget tem uma 'key que é única'
+
+class ContadorApp extends StatelessWidget {
+  // Essa classe é só uma casca de configuração do app
+  // Ela não guarda nenhum dado
+  const ContadorApp({super.key});
+
   @override
-  // Avisa ao compiulador: este método já existe na classe pai.
-  // (StatellessWidget) e estou reescrevendo o comportamento dele. 
   Widget build(BuildContext context) {
-    // build() é o méotod obrigatório chamado pelo Flutter para desenhar a interface. 
-    // Recebe um BuildContex (o 'endereço' deste widget na árvore e deve retornar o widget pronto).
+    // Monta e devolve a configuração geral do App
     return MaterialApp(
-      // Wdiget raíz que congiura o aplicativo inteiro! tema, título, tela inicial, e o visual.
       debugShowCheckedModeBanner: false,
-      // Remove a faixa vermleha 'DEBUG' do canto da tela - só estética.
-      title: 'Crachá Digital',
-      // Título interno do APP, não aparece na tela.
-      home: Scaffold(
-        // Home define a tela real do app. Scaffold cria o esqueleto padrão, que já reserva espaço para AppBar e corpo, por exemplo.
-        appBar: AppBar(
-          // Região Fixa no topo da tela.
-          title: const Text('Crachá Digital'),
-          // Texto exibido dentro da AppBar, cosnt porque nunca vai mudar.
-          // Então Flutter pode reaproveitar esse widget sem criar o título a cada 'redesenho'.
-        ),
-        body: Padding(
-          // Body é a região principal da página, abaixo de AppBar.
-          // Padding cria espaço interno ao redor do seu conteúdo.
-          padding: const EdgeInsets.all(24),
-          // 24 Pixels de 'respiro' nos 4 lados, entre a borda da tela e o conteúdo.
-          child: Column(
-            // Column empilha seus filhos verticalmente. primeiro o cartão do crachá, depois o botão.
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            // Controla o eixo da coluna horizontal. 'Stretch' faz cada filho ocupar toda a largura disponivel.
-            //É por isso que o cartão e o botão vão preencher a largura da tela, em vez de ficarem do tamanho especifico de seu conteudo.
-            children: [
-              // Aqui faremos a lista de filhos da coluna
-              Container(
-                // Container é a "caixa" que dará a aparencia de cartão ao conjunto de textos
-                padding: const EdgeInsets.all(16),
-                //Espaco interno do container. distancia entre a borda do cartao e o conteudo dentro
-                decoration: BoxDecoration(
-                  // Cuida da aparencia da caixa
-                  color: Colors.blue,
-                  // Pinta o fundo do conteiner
-                  borderRadius: BorderRadius.circular(12),
-                  // Arredonda os 4 cantos do container com um raio de 12 pixels
-                  border: Border.all(color: Colors.blue.shade50),
-                  //Desenha um contorno fino ao redor do conteiner
-                ),
-                child: const Column(
-                  // O container tmb so aceita um filho - aqui, uma column propia, local a este cartao
-                  // Const pq nada aqui dentro vai mudar em tempo de execucao
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  //dentro do cartao, o alinhamento a esquerda - uma column diferente pode ter configuracao diferente da colunm externa
-                  children: [
-                    //Faremos a lista de filhos da coluna
-                    Text('Misael Morgado', style: TextStyle(
-                      fontSize: 28,
-                      // tamanho da fonte em pixels - bem grande
-                      fontWeight: FontWeight.bold,                    
-                    ),
-                    ),
-                    SizedBox(height: 4),
-                    //Widget invisivel que adiciona um espaco vertical de 4 pixels entre nome e o cargo
-                    Text('Tecnico de manutenção',
-                      style: TextStyle(fontSize: 16, color: Colors.grey),
-                    ),
-                    SizedBox(height: 4),
-                    //Widget invisivel que adiciona um espaco vertical de 4 pixels entre cargo e o resto da column
-                    Row(
-                      //Row organiza seus filhos lado a lado, nahorizontal, difrente da column
-                      children: [
-                        Icon(Icons.factory, color: Colors.blue),
-                        //icon e apenas um desenho vetorial da biblioteca material
-                        //puramente visual. Aqui um icone da frabica
-                        SizedBox(width: 8),
-                        //Dentro da row, sizedbox(width:) cria um espaço horizontal entre o icone e o texto
-                        Text('Setor: Manuteção Industrial'),
-                        //Texto final da row
-                      ],
-                    ) 
-                  ],
-                )
+      title: "Contador de inspeção",
+      // Titulo interno do app
+      home: const TelaContador(),
+      // A tela inicial do app é o Widget TelaContador, definido logo abaixo.
+    );
+  }
+}
+
+class TelaContador extends StatefulWidget {
+  // Isso é novo em relação ao projeto (Crachá)
+  // Agora, a tela precisa lembrar de dados que mudam
+  // a contagem, o nome digitado, o histórico. Esta classe ainda não está guardando nada sozinha, mas ela já declara que existe um state associado a ela.
+  const TelaContador({super.key});
+
+  @override
+  State<TelaContador> createState() => _TelaContadorState();
+  // createState é o método que o Flutter chama para criar o objeto de estado ligado a este widget.
+
+}
+
+class _TelaContadorState extends State<TelaContador>{
+  // Esta é a classe que efetivamente guarda os dados que podem mudar durante o uso do app. Funciona como um cofre que entre um reconstrução e outra das tela.
+  int _pecasAprovadas = 0;
+  // Variável que guarda a contagem atual de peças aprovadas
+  final _nomeController = TextEditingController();
+  // TextEditingController é a ponte entre o que aparece na tela e o nosso código dart. Guarda o texto digitado e o permite lê-lo a qualquer momento em "nomeController.text". O final é pq o Controller em si nunca muda, quem muda é o texto dentro dele.
+  final List<String>_resgistros = [];
+  // Lista vazia de textos que vai guardar o histórico de registros de inspeção fechados no turno.
+  void _aprovarPeca() {
+    // Funçao chamada toda vez que o botão "+1 peça" é tocado pelo usuário
+    setState(() {
+      // Sempre que um dado do state muda, esta alteração precisa ocorrer dentro do SetState para que o Flutter saiba que precisa redesenhar a tela com o novo valor.
+      _pecasAprovadas ++;
+      // Incrementa a contagem de peças em 1 unidade.
+      
+    });
+  }
+
+  void _registrarEZerar() {
+    // Funçar chamada quendo o botão "registrar e zerar" é tocado pelo usuário
+    final nome = _nomeController.text.trim().isEmpty ? "Sem nome" : _nomeController.text.trim();
+    // Operador ternário (condição ? valorVerdadeiro : valorFalso)
+    //.trim remove espaços em branco do texto
+    // Se, depois disso, o texto estiver vazio, usamos "não informado"; senão, usamos o nome digitado.
+    setState(() {
+      // Denovo , toda mudança do State entra no Set State
+      _resgistros.add('$nome - $_pecasAprovadas peça(s)');
+      // Monta um texto combinando o nome e a contagem atual
+      _pecasAprovadas = 0;
+      // Zera o contador, para o inspetor começa a contar o próximo lote de pecas;
+    });
+  }
+
+  @override
+  void dispose() {
+    // Dispose é chamado pelo flutetr quando a tela é removida quando a tela removida da árvore de widgets, ou seja, quando o usuário sai da tela
+    _nomeController.dispose();
+    // Libera os recursos do recurso (evita deixar memória alocada / em uso)
+    super.dispose();
+    // Chama a implementação original / nativa do sispose da classe pai. Deve ser a sempre última linha da função dispose, para garantir que tudo seja limpo corretamente
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Monta e desenvolve a árvore de widgets que representa a tela no estado ATUAL (com os valores atuais de _pecasAprovadas, nomeController.text e _registros)
+    return Scaffold(
+      // Esqueleto padrão de uma tela do Flutter
+      appBar: AppBar(
+        title: Text("Inspeção de Peças")
+        // Título fixo da barra do topo da tela
+      ),
+      body: Padding(
+        // Corpo da tela com espaçamento interno ao redor de todo o elemento
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          // Organiza todo o conteúdo da tela verticalmente 
+          children: [
+            TextField(
+              // Campo de texto onde o inspetor digita o nome dele
+              controller: _nomeController,
+              // Liga este compo ao controller declarado anteriormente, é assim que conseguimos ler o texto digitado
+              decoration: const InputDecoration(
+                labelText: "Nome do Inspetor do Turno",
+                border: OutlineInputBorder(),
+                // Desenha um controno ao redor da caixa de texto
               ),
-              const SizedBox(height: 24),
-              //Espaço vertical entre o cartão e o botão
-              FilledButton.icon(
-                //Tipo de botão que já etá preenchido icone + texto, lado a lado sem precisar montar uma row manual para ele
-                onPressed: (){
-                  //Ação de callback executada toda vez que o botão é tocado
-                  //Aqui usamos uma função anônima
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    // Context é o endereço deste widget denro da arvore
-                    //.showSnackBar pede para esse scarffold exibir um aviso
-                    const SnackBar(
-                      //Snackbar é o aviso que desliza na parte inferior, mostra a mensagem por alguns segundos
-                      content: Text('Acesso Liberado!')
+              onChanged: (text) {
+                // onChanged é chamado pelo Flutter toda vez que o usuário digita ou apagua um caracter.
+                setState(() {
+                  // Chamamos o setState com um bloco vazio só para forçar a tela a se redezenhar. O dado em si só não mudoum só foi atualizado pelo controller, só precisamos avisar o Flutter para reler esse valor no Text logo abaixo.
+
+                });
+              },
+            ),
+            const SizedBox(height: 16),
+            // Espaço vertical entre o compo de texto e a linha de responsável
+
+            Text(
+              _nomeController.text.trim().isEmpty ? "Responsável: Não Informado" : "Responsável: ${_nomeController.text.trim()}",
+              // Se o compo ainda está vazio, mostramos um aviso, senão mostramos o nome digitado - interpolado dentro do texto com ${}.
+              style: const TextStyle(fontSize: 16, color: Colors.grey),
+            ),
+
+            const SizedBox(height: 16),
+
+            Text(
+              '$_pecasAprovadas',
+              style: const TextStyle(fontSize: 60, fontWeight: FontWeight.bold),
+              // Fonte bem grande e em negrita, para destacar o texto
+            ),
+
+            Row(
+              // Linha horizontal com dois botões
+              mainAxisAlignment: MainAxisAlignment.center,
+              // Centraliza os botões no eixo principal da Row (horizontal)
+              children: [
+                FilledButton.icon(
+                  // Este é um estilo de botão já preenchido, será aprovado para aprovar a peça
+                  onPressed: _aprovarPeca,
+                  // Quando tocado o botão chama a função AprovarPeca, essa é uma forma curta/abreviada de escrever: onPressed: (){_aprovarPeca();}
+                  icon: const Icon(Icons.add),
+                  label: const Text("+1 peça")
+                ),
+                const SizedBox(width: 12),
+
+                OutlinedButton.icon(
+                  onPressed: _registrarEZerar,
+                  icon: const Icon(Icons.save_alt),
+                  label: const Text("Registrar e Zerar"),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Histórico do Turno",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Expanded(
+              child: _resgistros.isEmpty
+                  ? const Center(child: Text("Nenhum registro ainda"))
+                  : ListView.builder(
+                      itemCount: _resgistros.length, 
+                      itemBuilder: (context, index) {
+                        return Card(
+                          child: ListTile(
+                            leading: const Icon(Icons.history),
+                            title: Text(_resgistros[index]),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                }, 
-                icon: const Icon(Icons.lock_open),
-                // Icone exibido á esquerda do texto do botão, neste caso, um cadeado
-                label: Text('Acesso liberado!')
-              )
-            ],
-          )
-        )
+            ),
+          ],
+        ),
       ),
     );
   }
